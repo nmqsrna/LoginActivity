@@ -21,8 +21,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText password;
     private EditText confirmPassword;
 
-    private Button btnRegister;
-    private TextView tvLogin;
+    private Button Register;
+    private TextView Login;
 
     private DatabaseHelper databaseHelper;
     private User user;
@@ -38,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         initObjects();
     }
 
-    /**
+    /*
      * This method is to initialize views
      */
     private void initViews() {
@@ -48,23 +48,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         password =  findViewById(R.id.etPassword);
         confirmPassword =  findViewById(R.id.etConfirmPassword);
 
-
-        btnRegister = findViewById(R.id.btnRegister);
-
-        tvLogin = findViewById(R.id.tvLogin);
+        Register = findViewById(R.id.btnRegister);
+        Login = findViewById(R.id.tvLogin);
 
     }
 
-    /**
+    /*
      * This method is to initialize listeners
      */
     private void initListeners() {
-        btnRegister.setOnClickListener(this);
-        tvLogin.setOnClickListener(this);
+        Register.setOnClickListener(this);
+        Login.setOnClickListener(this);
 
     }
 
-    /**
+    /*
      * This method is to initialize objects to be used
      */
     private void initObjects() {
@@ -74,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    /**
+    /*
      * This implemented method is to listen the click on view
      *
      * @param v
@@ -93,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    /**
+    /*
      * This method is to validate the input text fields and post data to SQLite
      */
     private void postDataToSQLite() {
@@ -119,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    /**
+    /*
      * This method is to empty all input edit text
      */
     private void emptyInputEditText() {

@@ -9,18 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginActivity">
+
+        <activity
+            android:name=".ResetActivity"
+            android:exported="false" />
+
         <activity
             android:name=".SplashScreenActivity"
             android:exported="false" />
-        <activity
-            android:name=".User"
-            android:exported="false" />
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
-        <activity
-            android:name=".DatabaseHelper"
-            android:exported="false" />
+
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
@@ -32,6 +33,23 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".SplashHomeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".HomePage"
+            android:exported="false">
+
         </activity>
     </application>
 

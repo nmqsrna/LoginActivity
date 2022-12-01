@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DatabaseHelper extends  SQLiteOpenHelper {
     //database version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     //database name
     private static final String DATABASE_NAME = "UserManager.db";
@@ -27,8 +27,11 @@ public class DatabaseHelper extends  SQLiteOpenHelper {
     private static final String COLUMN_USER_PASSWORD = "user_password";
 
     //SQL Query create table
-    private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "(" + COLUMN_USER_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_NAME + "TEXT,"
-            + COLUMN_USER_EMAIL + "TEXT," + COLUMN_USER_PASSWORD + "TEXT" + ")";
+    private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
+            + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_USER_NAME + " TEXT,"
+            + COLUMN_USER_EMAIL + " TEXT,"
+            + COLUMN_USER_PASSWORD + " TEXT" + ")";
 
 
     //SQL Query Drop Table
@@ -48,10 +51,9 @@ public class DatabaseHelper extends  SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //Drop table user if exist
+
         db.execSQL(DROP_USER_TABLE);
 
-        //create table again
         onCreate(db);
     }
 
@@ -63,13 +65,23 @@ public class DatabaseHelper extends  SQLiteOpenHelper {
         values.put(COLUMN_USER_EMAIL, user.getEmail());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
 
-        //Insert data in a row
         db.insert(TABLE_USER, null, values);
         db.close();
 
     }
 
-    /**
+    public boolean updatepassword(String user, String password)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_PASSWORD, password);
+        long result = db.update(TABLE_USER,values,"user_email = ?", new String[] {COLUMN_USER_EMAIL});
+        if (result==-1) return false;
+        else
+            return true;
+    }
+
+    /*
      * This method is to fetch all user and return the list of user records
      *
      * @return list
@@ -91,7 +103,7 @@ public class DatabaseHelper extends  SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         // query the user table
-        /**
+        /*
          * Here query function is used to fetch records from user table this function works like we use sql query.
          * SQL query equivalent to this query function is
          * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
@@ -124,26 +136,25 @@ public class DatabaseHelper extends  SQLiteOpenHelper {
         return userList;
     }
 
-    /**
+    /*
      * This method to update user record
      *
      * @param user
      */
-    public void updateUser(User user) {
+    public Boolean updateUser(String user, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_USER_NAME, user.getUsername());
-        values.put(COLUMN_USER_EMAIL, user.getEmail());
-        values.put(COLUMN_USER_PASSWORD, user.getPassword());
+        values.put(COLUMN_USER_PASSWORD, password);
 
-        // updating row
-        db.update(TABLE_USER, values, COLUMN_USER_ID + " = ?",
-                new String[]{String.valueOf(user.getId())});
-        db.close();
+        long result = db.update(TABLE_USER,values, COLUMN_USER_EMAIL + " = ?",
+                new String[] {user});
+        if (result==-1) return false;
+        else
+            return true;
     }
 
-    /**
+    /*
      * This method is to delete user record
      *
      * @param user
@@ -156,24 +167,40 @@ public class DatabaseHelper extends  SQLiteOpenHelper {
         db.close();
     }
 
+    public boolean checkUser(String email) {
+        String[] columns = {COLUMN_USER_ID};
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selection = COLUMN_USER_EMAIL + " = ?";
+        String[] selectionArgs = {email};
+        Cursor cursor = db.query(TABLE_USER,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null);
+        int cursorCount = cursor.getCount();
+        cursor.close();
+        db.close();
+
+        if (cursorCount > 0) {
+            return true;
+        }
+            return false;
+        }
+
     //check user exist or not
     public boolean checkUser(String email, String password) {
         String[] columns = {COLUMN_USER_ID};
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        //Select criteria
-        String selection = COLUMN_USER_EMAIL + " = ?" + "AND" + COLUMN_USER_PASSWORD + " =?";
+        String selection = COLUMN_USER_EMAIL + " = ?" + " AND " + COLUMN_USER_PASSWORD + " =?";
 
-        //Selection arguments
         String[] selectionArgs = {email, password};
 
-        //SQL Query user table with condition
-        /**
-         * Here query function is used to fetch records from user table this function works like we user sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id FROM user WHERE user_email = 'nr.syazrina88@gmail.com' AND user_pasword = "1234";
-         */
 
         Cursor cursor = db.query(TABLE_USER,
                 columns,
@@ -188,8 +215,7 @@ public class DatabaseHelper extends  SQLiteOpenHelper {
 
         if (cursorCount > 0) {
             return true;
-        } else {
+        }
             return false;
         }
     }
-}

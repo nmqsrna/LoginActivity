@@ -15,7 +15,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText email, password;
     private Button btnLogin;
-    private TextView tvRegister;
+    private TextView tvRegister, tvForgotPassword;
     private DatabaseHelper databaseHelper;
 
     @Override
@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initObjects();
     }
 
-    /**
+    /*
      * This method is to initialize views
      */
     private void initViews() {
@@ -37,17 +37,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         password =  findViewById(R.id.etPassword);
         btnLogin =  findViewById(R.id.btnLogin);
         tvRegister = findViewById(R.id.tvRegister);
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
     }
 
-    /**
+    /*
      * This method is to initialize listeners
      */
     private void initListeners() {
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
+        tvForgotPassword.setOnClickListener(this);
     }
 
-    /**
+    /*
      * This method is to initialize objects to be used
      */
     private void initObjects() {
@@ -55,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    /**
+    /*
      * This implemented method is to listen the click on view
      *
      * @param v
@@ -65,32 +67,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.btnLogin:
                 verifyFromSQLite();
+                Intent intentLogin = new Intent(getApplicationContext(), SplashHomeActivity.class);
+                startActivity(intentLogin);
                 break;
             case R.id.tvRegister:
                 // Navigate to RegisterActivity
                 Intent intentRegister = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intentRegister);
                 break;
+            case R.id.tvForgotPassword:
+                // Navigate to RegisterActivity
+                Intent intentForgotPass = new Intent(getApplicationContext(), ResetActivity.class);
+                startActivity(intentForgotPass);
+                break;
         }
     }
 
 
-    /**
+    /*
      * This method is to validate the input text fields and verify login credentials from SQLite
      */
     private void verifyFromSQLite() {
-        if (databaseHelper.checkUser(email.getText().toString().trim(), password.getText().toString().trim())){
-            Intent intentMain = new Intent(LoginActivity.this, MainActivity.class);
-            //accountsIntent.putExtra("EMAIL", email.getText().toString().trim());
+        if (databaseHelper.checkUser(email.getText().toString().trim(),
+                password.getText().toString().trim())){
+
+
+            Intent intentMain = new Intent(LoginActivity.this, SplashHomeActivity.class);
+
             emptyInputEditText();
             startActivity(intentMain);
         } else {
             // Toast to show success message that record is wrong
-            //    Toast.makeText(LoginActivity.this,"Email or password is wrong. Check and try again", Toast.LENGTH_LONG).show();
+               Toast.makeText(LoginActivity.this,"Email or password is wrong. Check and try again", Toast.LENGTH_LONG).show();
         }
     }
 
-    /**
+    /*
      * This method is to empty all input edit text
      */
     private void emptyInputEditText() {
