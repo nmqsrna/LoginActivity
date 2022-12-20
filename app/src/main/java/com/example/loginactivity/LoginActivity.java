@@ -98,7 +98,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(intentMain);
         } else {
             // Toast to show success message that record is wrong
-            Intent intentMain = new Intent(LoginActivity.this, LoginActivity.class);
                Toast.makeText(LoginActivity.this,"Email or password is wrong. Check and try again", Toast.LENGTH_LONG).show();
         }
     }
